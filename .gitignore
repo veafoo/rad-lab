@@ -38,3 +38,4 @@ missions/*/experiments/*/runs/raw/
 .live-approved-by-rad-*
 .claude/
 
+research/index.sqlite
