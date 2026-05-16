@@ -39,7 +39,7 @@ def check_oos_overlap(
     de = parse_date(date_end)
     os_s = parse_date(oos_start)
     os_e = parse_date(oos_end)
-    overlaps = not (de < os_s or ds > os_e)
+    overlaps = not (de <= os_s or ds >= os_e)
     if overlaps:
         return False, f"range [{date_start}->{date_end}] overlaps OOS [{oos_start}->{oos_end}]"
     return True, f"range [{date_start}->{date_end}] OK (no OOS touch)"
