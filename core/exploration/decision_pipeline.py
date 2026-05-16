@@ -11,6 +11,7 @@ import json, sqlite3
 from pathlib import Path
 from core.stats.bootstrap import bootstrap_profit_factor
 from core.stats.dsr import deflated_sharpe_ratio
+from core.exploration.anti_overfit_audit import audit_batch
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 DB_PATH = REPO_ROOT / "research" / "index.sqlite"
@@ -66,9 +67,12 @@ def process_family(family_id, mission="unknown", synthesizer=None,
                    pf_min=PF_HARD_MIN, dsr_min=DSR_MIN):
     """Full pipeline for one family: assess -> (synthesize) -> inbox."""
     from core.orchestrator.memory.index_db import push_to_inbox
-    survivors = assess_family(family_id, pf_min=pf_min, dsr_min=dsr_min)
-    if not survivors:
-        return {"family_id": family_id, "n_survivors": 0, "brain_path": None}
+    raw_survivors = assess_family(family_id, pf_min=pf_min, dsr_min=dsr_min)
+    if not raw_survivors:
+        return {"family_id": family_id, "n_survivors": 0, "audit_summary": None, "brain_path": None}
+    audit_result = audit_batch(raw_survivors)
+    survivors = audit_result["audited"]
+    audit_summary = audit_result["summary"]
     if synthesizer is not None:
         r = synthesizer.run({"survivors": survivors, "mission": mission})
         brief = r["output"] or ""
@@ -78,11 +82,11 @@ def process_family(family_id, mission="unknown", synthesizer=None,
             description=(brief[:500] + (f"\n\n[brain] {r['brain_path']}" if r.get("brain_path") else "")),
             priority="high",
         )
-        return {"family_id": family_id, "n_survivors": len(survivors),
+        return {"family_id": family_id, "n_survivors": len(survivors), "audit_summary": audit_summary,
                 "brain_path": r.get("brain_path"), "brief": brief}
     else:
         push_survivors_to_inbox_raw(family_id, survivors)
-        return {"family_id": family_id, "n_survivors": len(survivors), "brain_path": None}
+        return {"family_id": family_id, "n_survivors": len(survivors), "audit_summary": audit_summary, "brain_path": None}
 
 
 if __name__ == "__main__":
