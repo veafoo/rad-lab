@@ -1,0 +1,28 @@
+# Budget caps for rad-lab API/token consumption.
+# null = no cap on that dimension.
+
+# Token caps (counts only API calls, not local Ollama which is free)
+daily_tokens: null      # null = no daily cap (Pro plan, no API external)
+monthly_tokens: null    # null = no monthly cap
+
+# Cost caps (in USD, for when external API budget is activated)
+daily_cost_usd: 0.0     # 0 = no API budget activated yet (pure Pro+Ollama)
+monthly_cost_usd: 0.0   # 0 = no API budget activated yet
+
+# Per-router caps (when API external is activated, distribute budget)
+routers:
+  claude_code_cli:
+    notes: "Uses Pro quota, not counted in caps"
+  ollama:
+    notes: "Local, free, not counted"
+  anthropic_api:
+    daily_cost_usd: 0.0
+    monthly_cost_usd: 0.0
+    notes: "Activate by setting non-zero caps + ANTHROPIC_API_KEY in env"
+  claude_sdk:
+    notes: "Uses Pro quota if available, else falls back"
+
+# Reset behavior
+reset_timezone: UTC
+reset_daily_at: "00:00"
+reset_monthly_at: "1st 00:00"
