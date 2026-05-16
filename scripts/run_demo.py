@@ -1,3 +1,7 @@
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+
 """Run a full E2E pipeline keeping all traces (for dashboard demo).
 
 WARNING: Pollutes DB. Reset: python scripts/init_db.py (after manually dropping the file).
