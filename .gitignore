@@ -1,0 +1,38 @@
+# Python
+__pycache__/
+*.py[cod]
+*.so
+*.egg-info/
+venv/
+.venv/
+env/
+
+# OS
+.DS_Store
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# Secrets
+.env
+.env.local
+*.key
+*.pem
+
+# Logs
+*.log
+meta/logs/
+
+# DB transients
+*.sqlite-journal
+*.sqlite-shm
+*.sqlite-wal
+
+# Artifacts massifs
+missions/*/backtests/*/runs/*.csv
+missions/*/experiments/*/runs/raw/
+
+# Wake-up tokens (jamais commit, ils expirent vite)
+.live-approved-by-rad-*

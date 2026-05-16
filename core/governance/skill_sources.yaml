@@ -1,0 +1,26 @@
+tier_1:
+  - name: anthropics/skills
+    url: https://github.com/anthropics/skills
+    type: github_repo
+    trust_level: official
+  - name: anthropics/anthropic-cookbook
+    url: https://github.com/anthropics/anthropic-cookbook
+    type: github_repo
+    trust_level: official
+
+tier_2:
+  criteria:
+    min_stars: 100
+    max_last_commit_age_days: 90
+    tests_present: required
+  audit_steps:
+    - read_full_code
+    - search_shell_injection
+    - search_suspicious_env_vars
+    - search_external_requests
+    - sandbox_test_on_synthetic_data
+    - rad_approval
+
+forbidden:
+  - reason: no audit possible
+    examples: [pastebin, private_gists, anonymous_uploads]

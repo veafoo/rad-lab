@@ -1,0 +1,36 @@
+# Performance targets pour validation ship-ready
+
+hard_minimum:
+  profit_factor: 1.5
+  max_drawdown: 0.08
+  min_trades_oos: 100
+  sharpe_deflated: 1.5
+  win_rate_minimum: 0.30
+  oos_period_months: 12
+
+target_standard:
+  profit_factor: 1.8
+  max_drawdown: 0.06
+  min_trades_oos: 150
+  sharpe_deflated: 1.8
+
+stretch_1:
+  profit_factor: 2.0
+  max_drawdown: 0.05
+  sharpe_deflated: 2.0
+  consecutive_quarters_required: 2
+
+stretch_2:
+  profit_factor: 2.5
+  max_drawdown: 0.04
+  sharpe_deflated: 2.5
+  consecutive_quarters_required: 4
+
+robustness:
+  perturbation_pct: 0.20
+  perf_decay_max: 0.30
+  sub_period_consistency: 0.80
+  baseline_comparison_required:
+    - current_prod
+    - random_strategy
+    - buy_and_hold

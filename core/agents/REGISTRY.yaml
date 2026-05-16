@@ -1,0 +1,18 @@
+# Format entree :
+# - id: agent-name
+#   status: active | dormant | archived
+#   created_at: ISO date
+#   last_invoked_at: ISO date
+#   total_invocations: int
+#   total_tokens_used: int
+#   success_rate: 0.0-1.0
+#   description: string
+#   prompt_path: relative path
+#   metrics_path: relative path
+
+agents: []
+
+meta:
+  max_active_agents: 30
+  veille_threshold_days: 30
+  archive_threshold_days: 90
