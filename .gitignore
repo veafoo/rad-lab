@@ -39,3 +39,4 @@ missions/*/experiments/*/runs/raw/
 .claude/
 
 research/index.sqlite
+brain/dashboard.html
