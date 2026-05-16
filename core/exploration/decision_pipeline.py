@@ -36,10 +36,10 @@ def assess_family(family_id, pf_min=PF_HARD_MIN, dsr_min=DSR_MIN):
         if len(pnls) < 30: continue
         bs = bootstrap_profit_factor(pnls, n_iter=1000)
         dsr = deflated_sharpe_ratio(pnls, sr_trials_variance=0.5, n_trials=n_total)
-        if (r["profit_factor"] >= pf_min and bs["ci_lower"] > 1.0 and dsr["dsr"] >= dsr_min):
+        if (r["profit_factor"] >= pf_min and bs["ci_low"] > 1.0 and dsr["dsr"] >= dsr_min):
             survivors.append({
                 "experiment_id": r["experiment_id"], "pf": r["profit_factor"],
-                "pf_ci": [bs["ci_lower"], bs["ci_upper"]], "dsr": dsr["dsr"],
+                "pf_ci": [bs["ci_low"], bs["ci_high"]], "dsr": dsr["dsr"],
                 "sharpe": r["sharpe_ratio"], "n_trades": r["n_trades"],
             })
     return survivors
