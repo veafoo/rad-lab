@@ -12,3 +12,6 @@ All notes written by rad-lab.
 - [[briefs/2026-05-16/231117_megakichta_survivors_n7]] - 7 survivors brief (megakichta)
 - [[briefs/2026-05-16/231119_megakichta_survivors_n1]] - 1 survivors brief (megakichta)
 - [[sessions/2026-05-16/231508_2026-05-17-phase-B1-dashboard]] - Session 2026-05-17: Phase B1 + Dashboard
+- [[briefs/2026-05-16/231609_megakichta_survivors_n7]] - 7 survivors brief (megakichta)
+- [[briefs/2026-05-16/231611_megakichta_survivors_n1]] - 1 survivors brief (megakichta)
+- [[hypotheses/234708_H001-lookahead-investigation-RESOLVED]] - H001 RESOLVED: no lookahead in Megakichta v10.2
