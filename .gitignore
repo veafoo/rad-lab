@@ -36,3 +36,5 @@ missions/*/experiments/*/runs/raw/
 
 # Wake-up tokens (jamais commit, ils expirent vite)
 .live-approved-by-rad-*
+.claude/
+
