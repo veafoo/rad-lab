@@ -1,0 +1,125 @@
+# 5 familles d'hypothèses initiales pour exploration autonome
+# Format : chaque famille = un YAML avec H0/H1, variables grid, datasets, risques
+# Génération : Claude Sonnet 4.6 + validation Rad
+# Date : 2026-05-16
+
+families:
+  - id: F001-volatility-regime
+    name: Volatility Regime Conditional
+    hypothesis: Edge of Megakichta sub-strategies depends on volatility regime
+    h0: Sub-strat performance is uniform across volatility regimes
+    h1: At least one sub-strat shows significantly different perf by regime
+    theory: TREND needs momentum (high vol), RANGE works in compression (low vol),
+            BREAKOUT explodes SL in high vol without follow-through
+    variables:
+      atr_percentile_threshold: [20, 40, 60, 80]
+      atr_lookback_days: [7, 14, 30]
+      sub_strategy: [A, B, C]
+      regime: [low, mid, high]
+    metric_primary: profit_factor
+    metric_secondary: [max_drawdown, win_rate, sharpe_deflated]
+    data_required: [ohlcv_2h, atr_computed]
+    estimated_variants: 144
+    overfit_risk: medium
+    bonferroni_alpha: 0.0003
+    coin_universe: [ETH, BNB, ADA, LINK, DOGE]
+    period_in_sample: 2020-01-01 to 2024-01-01
+    period_validation: 2024-01-01 to 2025-05-01
+    period_oos_reserved: 2025-05-01 to 2026-05-01
+
+  - id: F002-funding-mean-reversion
+    name: Funding Rate Mean Reversion
+    hypothesis: Extreme funding rates on Binance Futures predict reversal in 4-8h
+    h0: Funding rate extremes have no predictive power on next 4-8h returns
+    h1: At extreme percentiles, contrarian entry has stat-sig edge
+    theory: Perpetual swap funding equilibrates long/short imbalance.
+            Extremes signal crowded positioning, primed for unwind.
+    variables:
+      funding_percentile: [85, 90, 95, 99]
+      holding_hours: [4, 8, 16]
+      direction: [contra_funding]
+      coin_universe: [top10, top30]
+    metric_primary: profit_factor
+    metric_secondary: [max_drawdown, sharpe_deflated]
+    data_required: [funding_rates_historical, ohlcv_2h]
+    estimated_variants: 24
+    overfit_risk: low
+    bonferroni_alpha: 0.002
+    coin_universe: [BTC, ETH, BNB, SOL, ADA, AVAX, DOGE, DOT, LINK, MATIC]
+    period_in_sample: 2021-01-01 to 2024-01-01
+    period_validation: 2024-01-01 to 2025-05-01
+    period_oos_reserved: 2025-05-01 to 2026-05-01
+
+  - id: F003-cross-coin-lead-lag
+    name: Cross-Coin Lead-Lag (BTC to Alts)
+    hypothesis: BTC moves first, alts follow with variable lag based on rolling correlation
+    h0: Alt returns are independent of recent BTC moves (controlled for own momentum)
+    h1: Alt returns at t+lag conditional on BTC move at t show stat-sig predictive power
+    theory: BTC = market beta in crypto, alts price in beta with delay.
+            Information lag exploitable systematically.
+    variables:
+      lag_bars: [1, 2, 4]
+      btc_alt_correlation_threshold: [0.5, 0.7, 0.85]
+      btc_move_atr_threshold: [1.5, 2.0, 3.0]
+      alt_beta_class: [high, low]
+    metric_primary: profit_factor
+    metric_secondary: [max_drawdown, hit_rate]
+    data_required: [ohlcv_2h_btc, ohlcv_2h_alts, rolling_correlation]
+    estimated_variants: 54
+    overfit_risk: medium
+    bonferroni_alpha: 0.0009
+    coin_universe: [ETH, BNB, ADA, AVAX, DOGE, DOT, LINK, MATIC, SOL]
+    period_in_sample: 2020-01-01 to 2024-01-01
+    period_validation: 2024-01-01 to 2025-05-01
+    period_oos_reserved: 2025-05-01 to 2026-05-01
+
+  - id: F004-wick-reversal-exhaustion
+    name: Wick Reversal on Extreme Candles
+    hypothesis: 2h candles with large wick + high volume signal exhaustion, revert 2-4 bars
+    h0: Wick-to-body ratio has no predictive power on next-N-bar returns
+    h1: Candles with wick/body greater than threshold and volume above P85 show mean reversion
+    theory: Long wicks = price rejection. High volume = strong rejection.
+            Combined signal stronger than either alone.
+    variables:
+      wick_body_ratio: [1.5, 2.0, 3.0]
+      volume_percentile: [75, 85, 95]
+      holding_bars: [2, 4, 6]
+      regime_filter: [none, trend_only, range_only]
+    metric_primary: profit_factor
+    metric_secondary: [max_drawdown, win_rate]
+    data_required: [ohlcv_2h, volume_percentiles]
+    estimated_variants: 108
+    overfit_risk: medium_high
+    bonferroni_alpha: 0.0005
+    coin_universe: [ETH, BNB, ADA, LINK, DOGE]
+    period_in_sample: 2020-01-01 to 2024-01-01
+    period_validation: 2024-01-01 to 2025-05-01
+    period_oos_reserved: 2025-05-01 to 2026-05-01
+
+  - id: F005-oi-surge-breakout
+    name: Open Interest Surge + Breakout Confirmation
+    hypothesis: OI surge above 2x 24h average + range breakout = high-conviction directional signal
+    h0: OI changes have no incremental predictive power beyond price breakout
+    h1: OI surge conditional on price breakout improves signal hit rate significantly
+    theory: Range breakouts are noisy. OI surge confirms real flow behind the move,
+            not just thin orderbook sweep.
+    variables:
+      oi_surge_multiplier: [1.5, 2.0, 3.0]
+      range_lookback_days: [3, 7, 14]
+      breakout_atr_confirm: [0.5, 1.0]
+      holding_hours: [4, 8, 16]
+    metric_primary: profit_factor
+    metric_secondary: [max_drawdown, sharpe_deflated, win_rate]
+    data_required: [ohlcv_2h, open_interest_historical, range_calculations]
+    estimated_variants: 54
+    overfit_risk: low_medium
+    bonferroni_alpha: 0.0009
+    coin_universe: [BTC, ETH, BNB, SOL, ADA, AVAX, DOGE, DOT, LINK]
+    period_in_sample: 2022-01-01 to 2024-01-01
+    period_validation: 2024-01-01 to 2025-05-01
+    period_oos_reserved: 2025-05-01 to 2026-05-01
+
+# Meta
+total_estimated_variants: 384
+global_bonferroni_alpha: 0.00013
+expected_survivors_oos: 0-3 (statistically, given strict filtering)
