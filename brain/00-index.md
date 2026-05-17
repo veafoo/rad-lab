@@ -15,3 +15,4 @@ All notes written by rad-lab.
 - [[briefs/2026-05-16/231609_megakichta_survivors_n7]] - 7 survivors brief (megakichta)
 - [[briefs/2026-05-16/231611_megakichta_survivors_n1]] - 1 survivors brief (megakichta)
 - [[hypotheses/234708_H001-lookahead-investigation-RESOLVED]] - H001 RESOLVED: no lookahead in Megakichta v10.2
+- [[hypotheses/055339_H001-FINAL-edge-LONG-modest-SHORT-zero]] - H001 FINAL: LONG edge modeste, SHORT no edge
